@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elias Vance | Visual Storyteller & Editorial Photographer</title> <!--[cite: 18] -->
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts: Cormorant Garamond (Editorial Serif) & Plus Jakarta Sans (Modern UI) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Cormorant Garamond"', 'Didot', 'Georgia', 'serif'],
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                    },
+                    colors: {
+                        gold: {
+                            400: '#d8b675',
+                            500: '#c5a059', /* Muted Signature Gold[cite: 18] */
+                            600: '#ab8641',
+                        },
+                        atelier: {
+                            800: '#18181b',
+                            900: '#101014',
+                            950: '#0a0a0c',
+                        }
+                    },
+                    animation: {
+                        'float-soft': 'floatSoft 6s ease-in-out infinite',
+                        'pulse-glow': 'pulseGlow 4s ease-in-out infinite',
+                        'marquee': 'marqueeScroll 26s linear infinite',
+                    },
+                    keyframes: {
+                        floatSoft: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-8px)' },
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.25' },
+                            '50%': { opacity: '0.5' },
+                        },
+                        marqueeScroll: {
+                            '0%': { transform: 'translateX(0%)' },
+                            '100%': { transform: 'translateX(-50%)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Custom Minimalist Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #0a0a0c; }
+        ::-webkit-scrollbar-thumb { background: #c5a059; border-radius: 3px; }
+
+        .glass-nav {
+            background: rgba(10, 10, 12, 0.82);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+        }
+
+        .glass-card {
+            background: rgba(24, 24, 27, 0.5);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 45px rgba(0, 0, 0, 0.4);
+        }
+
+        .hero-surface {
+            background: linear-gradient(180deg, rgba(10, 10, 12, 0.45) 0%, rgba(10, 10, 12, 0.95) 100%), 
+                        url('https://images.unsplash.com/photo-1493863641943-9b68992a8d07?auto=format&fit=crop&w=2000&q=85'); /*[cite: 18] */
+            background-size: cover;
+            background-position: center;
+        }
+
+        .gold-line {
+            position: relative;
+        }
+        .gold-line::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0%;
+            height: 1px;
+            background: #c5a059;
+            transition: width 0.35s ease;
+        }
+        .gold-line:hover::after {
+            width: 100%;
+        }
+
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.85s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        .reveal-element.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Lightbox transitions */
+        #lightbox {
+            transition: opacity 0.3s ease, visibility 0.3s ease;
+        }
+        #lightbox.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+        #lightbox.active {
+            opacity: 1;
+            visibility: visible;
+            pointer-events: auto;
+        }
+    </style>
+</head>
+
+<body class="bg-atelier-950 text-stone-200 font-sans antialiased overflow-x-hidden selection:bg-gold-500 selection:text-black">
+
+    <!-- Ambient Glow Highlights -->
+    <div class="fixed top-12 left-1/3 w-[550px] h-[550px] bg-gold-500/10 blur-[160px] pointer-events-none -z-10 animate-pulse-glow"></div>
+    <div class="fixed bottom-10 right-10 w-[500px] h-[500px] bg-stone-700/10 blur-[180px] pointer-events-none -z-10 animate-pulse-glow"></div>
+
+    <!-- Navigation Bar[cite: 18] -->
+    <nav id="navbar" class="fixed top-0 left-0 w-full z-50 glass-nav border-b border-white/5 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
+            
+            <!-- Logo[cite: 18] -->
+            <a href="#home" class="font-serif text-2xl tracking-[4px] text-white uppercase group">
+                <span class="font-bold">STUDIO</span><span class="text-gold-500">.XP</span> <!--[cite: 18] -->
+            </a>
+
+            <!-- Desktop Links[cite: 18] -->
+            <div class="hidden md:flex items-center gap-8 text-xs font-semibold uppercase tracking-[2.5px] text-stone-300">
+                <a href="#work" class="gold-line hover:text-white transition">Selected Works</a> <!--[cite: 18] -->
+                <a href="#services" class="gold-line hover:text-white transition">Expertise</a> <!--[cite: 18] -->
+                <a href="#about" class="gold-line hover:text-white transition">About</a>
+                <a href="#contact" class="gold-line hover:text-white transition">Inquire</a> <!--[cite: 18] -->
+            </div>
+
+            <!-- Booking CTA Button -->
+            <div class="hidden md:flex items-center">
+                <a href="#contact" class="px-6 py-2.5 border border-gold-500/40 text-gold-400 hover:bg-gold-500 hover:text-atelier-950 transition-all duration-300 text-xs uppercase tracking-[2px] font-bold rounded-sm">
+                    Book Session
+                </a>
+            </div>
+
+            <!-- Mobile Hamburger Toggle -->
+            <button id="mobileMenuBtn" aria-label="Toggle navigation menu" class="md:hidden text-stone-300 hover:text-white p-2 focus:outline-none">
+                <i class="fa-solid fa-bars text-xl" id="menuToggleIcon"></i>
+            </button>
+        </div>
+
+        <!-- Mobile Drawer Navigation -->
+        <div id="mobileDrawer" class="hidden md:hidden px-6 pt-3 pb-8 bg-atelier-950/98 border-b border-white/10 backdrop-blur-2xl">
+            <div class="flex flex-col gap-4 text-xs font-semibold uppercase tracking-[2.5px] text-stone-300">
+                <a href="#work" class="mobile-nav-link py-2 hover:text-gold-400">Selected Works</a> <!--[cite: 18] -->
+                <a href="#services" class="mobile-nav-link py-2 hover:text-gold-400">Services &amp; Expertise</a> <!--[cite: 18] -->
+                <a href="#about" class="mobile-nav-link py-2 hover:text-gold-400">About the Artist</a>
+                <a href="#contact" class="mobile-nav-link py-2 hover:text-gold-400">Inquire &amp; Book</a> <!--[cite: 18] -->
+                <a href="#contact" class="mobile-nav-link text-center w-full mt-2 py-3 bg-gold-500 text-atelier-950 font-bold tracking-widest uppercase">
+                    Inquire Availability <!--[cite: 18] -->
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section[cite: 18] -->
+    <header id="home" class="relative min-h-screen flex items-center justify-center hero-surface px-6 pt-32 pb-20 text-center"> <!--[cite: 18] -->
+        <div class="max-w-4xl mx-auto reveal-element">
+            
+            <div class="inline-flex items-center gap-3 text-gold-400 text-xs uppercase tracking-[4px] font-semibold mb-6">
+                <span class="w-8 h-[1px] bg-gold-500"></span>
+                London • Paris • Worldwide Commissions <!--[cite: 18] -->
+                <span class="w-8 h-[1px] bg-gold-500"></span>
+            </div>
+
+            <h1 class="font-serif text-5xl sm:text-7xl lg:text-9xl font-normal text-white uppercase tracking-[8px] sm:tracking-[14px] leading-[1] mb-6"> <!--[cite: 18] -->
+                ELIAS VANCE <!--[cite: 18] -->
+            </h1>
+
+            <p class="font-serif italic text-xl sm:text-2xl lg:text-3xl text-stone-300 mb-8 font-light">
+                Editorial &amp; Wedding Photographer <!--[cite: 18] -->
+            </p>
+
+            <p class="text-stone-300 text-sm sm:text-base font-light max-w-xl mx-auto leading-relaxed mb-10 tracking-wide">
+                Documenting life's most meaningful moments through a cinematic and timeless lens. Authentic intimacy captured with film grain and intentional daylight. <!--[cite: 18] -->
+            </p>
+
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-5">
+                <a href="#work" class="w-full sm:w-auto px-9 py-4 bg-gold-500 hover:bg-gold-400 text-atelier-950 font-bold text-xs uppercase tracking-[2.5px] transition-all shadow-xl shadow-gold-500/10">
+                    Explore Portfolio <!--[cite: 18] -->
+                </a>
+                <a href="#services" class="w-full sm:w-auto px-9 py-4 border border-white/20 hover:border-gold-500 text-white font-semibold text-xs uppercase tracking-[2.5px] transition-all">
+                    View Investment <!--[cite: 18] -->
+                </a>
+            </div>
+
+            <!-- Credentials Strip -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-6 pt-16 mt-16 border-t border-white/10 max-w-3xl mx-auto text-center">
+                <div>
+                    <p class="font-serif text-3xl sm:text-4xl text-white font-bold">12+</p>
+                    <p class="text-[11px] uppercase tracking-widest text-stone-400 mt-1">Years of Craft</p>
+                </div>
+                <div>
+                    <p class="font-serif text-3xl sm:text-4xl text-gold-400 font-bold">400+</p>
+                    <p class="text-[11px] uppercase tracking-widest text-stone-400 mt-1">Weddings Captured</p>
+                </div>
+                <div>
+                    <p class="font-serif text-3xl sm:text-4xl text-white font-bold">28</p>
+                    <p class="text-[11px] uppercase tracking-widest text-stone-400 mt-1">Countries Documented</p>
+                </div>
+                <div>
+                    <p class="font-serif text-3xl sm:text-4xl text-gold-400 font-bold">35mm</p>
+                    <p class="text-[11px] uppercase tracking-widest text-stone-400 mt-1">Analogue &amp; Digital</p>
+                </div>
+            </div>
+
+        </div>
+    </header>
+
+    <!-- Editorial Feature Publications Marquee -->
+    <section class="py-6 bg-atelier-900 border-y border-white/5 overflow-hidden relative">
+        <div class="flex whitespace-nowrap animate-marquee items-center gap-16 font-serif text-sm sm:text-base tracking-[4px] uppercase text-stone-400">
+            <span class="hover:text-gold-400 transition-colors">Vogue Weddings</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">Harper's Bazaar</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">Kinfolk Gallery</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">British GQ</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">Elle Decor</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">The Lane</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <!-- Duplicate for Seamless Infinite Loop -->
+            <span class="hover:text-gold-400 transition-colors">Vogue Weddings</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">Harper's Bazaar</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">Kinfolk Gallery</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">British GQ</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">Elle Decor</span>
+            <span class="text-gold-500 text-xs">◆</span>
+            <span class="hover:text-gold-400 transition-colors">The Lane</span>
+            <span class="text-gold-500 text-xs">◆</span>
+        </div>
+    </section>
+
+    <!-- Services / Expertise Section[cite: 18] -->
+    <section id="services" class="py-28 max-w-7xl mx-auto px-6 reveal-element"> <!--[cite: 18] -->
+        <div class="text-center max-w-2xl mx-auto mb-20">
+            <span class="text-xs uppercase tracking-[3px] text-gold-500 font-semibold block mb-2">Offerings</span>
+            <h2 class="font-serif text-3xl sm:text-5xl font-bold uppercase tracking-[4px] text-white">Expertise</h2> <!--[cite: 18] -->
+            <div class="w-12 h-[1px] bg-gold-500 mx-auto mt-4"></div>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8"> <!--[cite: 18] -->
+            
+            <!-- Weddings[cite: 18] -->
+            <div class="glass-card p-8 sm:p-10 rounded-2xl border border-white/5 hover:border-gold-500/40 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group"> <!--[cite: 18] -->
+                <div>
+                    <span class="text-gold-500/40 font-serif text-4xl block mb-6 group-hover:text-gold-500 transition-colors">01</span>
+                    <h3 class="font-serif text-2xl font-bold text-white uppercase tracking-wider mb-4">Weddings</h3> <!--[cite: 18] -->
+                    <p class="text-stone-400 text-sm leading-relaxed mb-6 font-light">
+                        Full day coverage, luxury heirloom album, and engagement session included. <!--[cite: 18] --> Dedicated second shooter and private online proofing gallery.
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] uppercase tracking-widest text-stone-500 block">Investment</span>
+                        <span class="font-serif text-2xl font-bold text-gold-400">From $3,500</span> <!--[cite: 18] -->
+                    </div>
+                    <a href="#contact" class="w-10 h-10 rounded-full border border-gold-500/40 hover:bg-gold-500 hover:text-black flex items-center justify-center transition">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Portraits[cite: 18] -->
+            <div class="glass-card p-8 sm:p-10 rounded-2xl border border-white/5 hover:border-gold-500/40 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group"> <!--[cite: 18] -->
+                <div>
+                    <span class="text-gold-500/40 font-serif text-4xl block mb-6 group-hover:text-gold-500 transition-colors">02</span>
+                    <h3 class="font-serif text-2xl font-bold text-white uppercase tracking-wider mb-4">Portraits</h3> <!--[cite: 18] -->
+                    <p class="text-stone-400 text-sm leading-relaxed mb-6 font-light">
+                        Individual or creative sessions. 2-hour shoot with 3 outfit changes. <!--[cite: 18] --> Creative direction, bespoke studio lighting, and high-res master retouching.
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] uppercase tracking-widest text-stone-500 block">Investment</span>
+                        <span class="font-serif text-2xl font-bold text-gold-400">From $600</span> <!--[cite: 18] -->
+                    </div>
+                    <a href="#contact" class="w-10 h-10 rounded-full border border-gold-500/40 hover:bg-gold-500 hover:text-black flex items-center justify-center transition">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Commercial[cite: 18] -->
+            <div class="glass-card p-8 sm:p-10 rounded-2xl border border-white/5 hover:border-gold-500/40 hover:-translate-y-2 transition-all duration-300 flex flex-col justify-between group"> <!--[cite: 18] -->
+                <div>
+                    <span class="text-gold-500/40 font-serif text-4xl block mb-6 group-hover:text-gold-500 transition-colors">03</span>
+                    <h3 class="font-serif text-2xl font-bold text-white uppercase tracking-wider mb-4">Commercial</h3> <!--[cite: 18] -->
+                    <p class="text-stone-400 text-sm leading-relaxed mb-6 font-light">
+                        High-end product and lifestyle photography for brands and agencies. <!--[cite: 18] --> Full multi-channel usage licensing, moodboard preparation, and production coordination.
+                    </p>
+                </div>
+                <div class="pt-6 border-t border-white/10 flex items-center justify-between">
+                    <div>
+                        <span class="text-[11px] uppercase tracking-widest text-stone-500 block">Investment</span>
+                        <span class="font-serif text-2xl font-bold text-gold-400">Custom Quote</span> <!--[cite: 18] -->
+                    </div>
+                    <a href="#contact" class="w-10 h-10 rounded-full border border-gold-500/40 hover:bg-gold-500 hover:text-black flex items-center justify-center transition">
+                        <i class="fa-solid fa-arrow-right text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Selected Works Gallery[cite: 18] -->
+    <section id="work" class="py-24 bg-atelier-900/60 border-y border-white/5 reveal-element"> <!--[cite: 18] -->
+        <div class="max-w-7xl mx-auto px-6">
+            
+            <div class="flex flex-col md:flex-row justify-between items-start md:items-end gap-6 mb-16">
+                <div>
+                    <span class="text-xs uppercase tracking-[3px] text-gold-500 font-semibold block mb-2">Curated Folio</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold uppercase tracking-[4px] text-white">Selected Works</h2> <!--[cite: 18] -->
+                </div>
+                <p class="text-xs uppercase tracking-widest text-stone-400">Click any image to view in master fullscreen</p>
+            </div>
+
+            <!-- Gallery Grid with Clean Lightbox Triggers[cite: 18] -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                
+                <!-- Work 1 -->
+                <div class="group relative overflow-hidden rounded-xl h-[460px] bg-atelier-900 border border-white/10 cursor-pointer shadow-lg" onclick="openLightbox('https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=1600&q=85')">
+                    <img 
+                        src="https://images.unsplash.com/photo-1519741497674-611481863552?auto=format&fit=crop&w=800&q=80" 
+                        alt="The Cotswolds Nuptials" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 group-hover:brightness-100"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-[10px] uppercase font-bold text-gold-400 tracking-widest">Oxfordshire, UK</span>
+                        <h4 class="font-serif text-2xl font-bold text-white">The Cotswolds Nuptials</h4>
+                    </div>
+                </div>
+
+                <!-- Work 2 -->
+                <div class="group relative overflow-hidden rounded-xl h-[460px] bg-atelier-900 border border-white/10 cursor-pointer shadow-lg" onclick="openLightbox('https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=1600&q=85')">
+                    <img 
+                        src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=800&q=80" 
+                        alt="Sasha in Afternoon Light" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 group-hover:brightness-100"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-[10px] uppercase font-bold text-gold-400 tracking-widest">Editorial Portrait</span>
+                        <h4 class="font-serif text-2xl font-bold text-white">Sasha in Afternoon Light</h4>
+                    </div>
+                </div>
+
+                <!-- Work 3 -->
+                <div class="group relative overflow-hidden rounded-xl h-[460px] bg-atelier-900 border border-white/10 cursor-pointer shadow-lg" onclick="openLightbox('https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=1600&q=85')">
+                    <img 
+                        src="https://images.unsplash.com/photo-1511285560929-80b456fea0bc?auto=format&fit=crop&w=800&q=80" 
+                        alt="Villa Balbianello Vows" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 group-hover:brightness-100"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-[10px] uppercase font-bold text-gold-400 tracking-widest">Lake Como, Italy</span>
+                        <h4 class="font-serif text-2xl font-bold text-white">Villa Balbianello Vows</h4>
+                    </div>
+                </div>
+
+                <!-- Work 4 -->
+                <div class="group relative overflow-hidden rounded-xl h-[460px] bg-atelier-900 border border-white/10 cursor-pointer shadow-lg" onclick="openLightbox('https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=1600&q=85')">
+                    <img 
+                        src="https://images.unsplash.com/photo-1469334031218-e382a71b716b?auto=format&fit=crop&w=800&q=80" 
+                        alt="High Fashion Lookbook" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 group-hover:brightness-100"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-[10px] uppercase font-bold text-gold-400 tracking-widest">Parisian Fashion Week</span>
+                        <h4 class="font-serif text-2xl font-bold text-white">Autumnal Campaign</h4>
+                    </div>
+                </div>
+
+                <!-- Work 5 -->
+                <div class="group relative overflow-hidden rounded-xl h-[460px] bg-atelier-900 border border-white/10 cursor-pointer shadow-lg" onclick="openLightbox('https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=1600&q=85')"> <!--[cite: 18] -->
+                    <img 
+                        src="https://images.unsplash.com/photo-1542038784456-1ea8e935640e?auto=format&fit=crop&w=800&q=80" 
+                        alt="Studio Texture Study" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 group-hover:brightness-100"
+                    > <!--[cite: 18] -->
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-[10px] uppercase font-bold text-gold-400 tracking-widest">Brand Narrative</span>
+                        <h4 class="font-serif text-2xl font-bold text-white">Studio Texture Study</h4>
+                    </div>
+                </div>
+
+                <!-- Work 6 -->
+                <div class="group relative overflow-hidden rounded-xl h-[460px] bg-atelier-900 border border-white/10 cursor-pointer shadow-lg" onclick="openLightbox('https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=1600&q=85')">
+                    <img 
+                        src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=800&q=80" 
+                        alt="The Artist in Profile" 
+                        class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 filter brightness-95 group-hover:brightness-100"
+                    >
+                    <div class="absolute inset-0 bg-gradient-to-t from-black/85 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-6">
+                        <span class="text-[10px] uppercase font-bold text-gold-400 tracking-widest">Monochrome Classic</span>
+                        <h4 class="font-serif text-2xl font-bold text-white">The Gentleman's Study</h4>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- About the Artist Section -->
+    <section id="about" class="py-28 max-w-7xl mx-auto px-6 reveal-element">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+            
+            <div class="lg:col-span-5 relative">
+                <div class="rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative">
+                    <img 
+                        src="https://images.unsplash.com/photo-1552058544-f2b08422138a?auto=format&fit=crop&w=900&q=80" 
+                        alt="Elias Vance Photographer portrait" 
+                        class="w-full h-[500px] object-cover filter contrast-105"
+                    >
+                </div>
+                <!-- Signature Badge -->
+                <div class="absolute -bottom-6 -right-6 glass-card p-6 rounded-xl border border-gold-500/30 hidden sm:block">
+                    <p class="font-serif italic text-lg text-white">"Art is remembering."</p>
+                    <p class="text-[10px] uppercase tracking-widest text-gold-400 mt-1">&mdash; Elias Vance</p>
+                </div>
+            </div>
+
+            <div class="lg:col-span-7">
+                <span class="text-xs uppercase tracking-[3px] text-gold-500 font-semibold block mb-2">The Philosophy</span>
+                <h2 class="font-serif text-3xl sm:text-5xl font-bold text-white leading-tight mb-6">
+                    A Narrative Grounded in <br><span class="italic font-normal text-stone-300">Quiet Sincerity.</span>
+                </h2>
+                
+                <p class="text-stone-300 text-sm sm:text-base leading-relaxed mb-6 font-light">
+                    Based out of London, Elias Vance has spent over a decade documenting private ceremonies, haute couture runways, and timeless family archives across four continents. <!--[cite: 18] -->
+                </p>
+                
+                <p class="text-stone-400 text-sm sm:text-base leading-relaxed mb-8 font-light">
+                    Every commission is treated not merely as documentation, but as an heirloom collection—crafted using medium-format analogue film cameras and gentle continuous daylight to preserve the tactile weight of each second.
+                </p>
+
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 pt-6 border-t border-white/10">
+                    <div>
+                        <h4 class="font-serif font-bold text-white text-lg">Hasselblad &amp; Leica</h4>
+                        <p class="text-xs text-stone-400">Analogue Medium Format</p>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-white text-lg">Hand-Bound Books</h4>
+                        <p class="text-xs text-stone-400">Italian Linen Albums</p>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-bold text-white text-lg">London Studio</h4> <!--[cite: 18] -->
+                        <p class="text-xs text-stone-400">Available Worldwide</p> <!--[cite: 18] -->
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Contact & Inquiry Section[cite: 18] -->
+    <section id="contact" class="py-28 bg-atelier-900/80 border-t border-white/5 reveal-element"> <!--[cite: 18] -->
+        <div class="max-w-4xl mx-auto px-6">
+            
+            <div class="glass-card p-8 sm:p-14 rounded-3xl border border-white/10 shadow-2xl relative">
+                <div class="text-center mb-10">
+                    <span class="text-xs uppercase tracking-[3px] text-gold-500 font-semibold block mb-2">Initiate A Conversation</span>
+                    <h2 class="font-serif text-3xl sm:text-5xl font-bold uppercase tracking-[4px] text-white">Get in Touch</h2> <!--[cite: 18] -->
+                    <div class="w-12 h-[1px] bg-gold-500 mx-auto mt-4 mb-4"></div>
+                    <p class="text-stone-400 text-sm font-light">Limited to 20 private wedding commissions and select editorial campaigns per season.</p>
+                </div>
+
+                <form onsubmit="event.preventDefault(); alert('Inquiry received. Elias Vance Studio will respond within 24 hours.'); this.reset();" class="space-y-6"> <!--[cite: 18] -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-stone-400 mb-2 font-medium">Your Name</label> <!--[cite: 18] -->
+                            <input type="text" required placeholder="Elena Rostova" class="w-full px-4 py-3.5 bg-atelier-950 border border-white/10 rounded-lg text-white text-sm focus:border-gold-500 outline-none transition"> <!--[cite: 18] -->
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-stone-400 mb-2 font-medium">Email Address</label> <!--[cite: 18] -->
+                            <input type="email" required placeholder="elena@domain.com" class="w-full px-4 py-3.5 bg-atelier-950 border border-white/10 rounded-lg text-white text-sm focus:border-gold-500 outline-none transition"> <!--[cite: 18] -->
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-stone-400 mb-2 font-medium">Commission Scope</label>
+                            <select class="w-full px-4 py-3.5 bg-atelier-950 border border-white/10 rounded-lg text-white text-sm focus:border-gold-500 outline-none transition cursor-pointer [&>option]:bg-atelier-950">
+                                <option>Wedding &amp; Elopement</option> <!--[cite: 18] -->
+                                <option>Editorial &amp; Creative Portrait</option> <!--[cite: 18] -->
+                                <option>Commercial Lookbook &amp; Campaign</option> <!--[cite: 18] -->
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs uppercase tracking-wider text-stone-400 mb-2 font-medium">Event Date / Location</label>
+                            <input type="text" placeholder="e.g. October 2026, Tuscany, Italy" class="w-full px-4 py-3.5 bg-atelier-950 border border-white/10 rounded-lg text-white text-sm focus:border-gold-500 outline-none transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs uppercase tracking-wider text-stone-400 mb-2 font-medium">Your Vision</label>
+                        <textarea rows="5" required placeholder="Tell me about your vision, schedule, and aesthetic expectations..." class="w-full px-4 py-3.5 bg-atelier-950 border border-white/10 rounded-lg text-white text-sm focus:border-gold-500 outline-none transition resize-none"></textarea> <!--[cite: 18] -->
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-gold-500 hover:bg-gold-400 text-atelier-950 font-bold text-xs uppercase tracking-[3px] transition-all duration-300"> <!--[cite: 18] -->
+                        Send Message <!--[cite: 18] -->
+                    </button>
+                </form>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Footer[cite: 18] -->
+    <footer class="bg-atelier-950 border-t border-white/10 text-stone-400 text-xs py-16"> <!--[cite: 18] -->
+        <div class="max-w-7xl mx-auto px-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 pb-16 border-b border-white/5"> <!--[cite: 18] -->
+            
+            <!-- Column 1: Studio Brand[cite: 18] -->
+            <div>
+                <span class="font-serif text-2xl tracking-[3px] text-white uppercase block mb-4">STUDIO.XP</span> <!--[cite: 18] -->
+                <p class="text-stone-400 text-xs leading-relaxed max-w-xs font-light mb-6"> <!--[cite: 18] -->
+                    Documenting life's most meaningful moments through a cinematic lens. Based in London, available worldwide. <!--[cite: 18] -->
+                </p>
+                <div class="flex gap-4 text-base">
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-gold-500 hover:text-black flex items-center justify-center transition" aria-label="Instagram"><i class="fa-brands fa-instagram"></i></a> <!--[cite: 18] -->
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-gold-500 hover:text-black flex items-center justify-center transition" aria-label="Pinterest"><i class="fa-brands fa-pinterest"></i></a> <!--[cite: 18] -->
+                    <a href="#" class="w-8 h-8 rounded-full bg-white/5 hover:bg-gold-500 hover:text-black flex items-center justify-center transition" aria-label="Twitter"><i class="fa-brands fa-x-twitter"></i></a> <!--[cite: 18] -->
+                </div>
+            </div>
+
+            <!-- Column 2: Sitemap[cite: 18] -->
+            <div>
+                <h4 class="font-serif uppercase tracking-widest text-xs text-white font-bold mb-4">Sitemap</h4> <!--[cite: 18] -->
+                <ul class="space-y-2 text-xs"> <!--[cite: 18] -->
+                    <li><a href="#work" class="hover:text-gold-400 transition">Portfolio</a></li> <!--[cite: 18] -->
+                    <li><a href="#about" class="hover:text-gold-400 transition">About Me</a></li> <!--[cite: 18] -->
+                    <li><a href="#services" class="hover:text-gold-400 transition">Pricing &amp; Services</a></li> <!--[cite: 18] -->
+                    <li><a href="#contact" class="hover:text-gold-400 transition">Inquire</a></li> <!--[cite: 18] -->
+                </ul>
+            </div>
+
+            <!-- Column 3: Social & Press[cite: 18] -->
+            <div>
+                <h4 class="font-serif uppercase tracking-widest text-xs text-white font-bold mb-4">Social &amp; Press</h4> <!--[cite: 18] -->
+                <ul class="space-y-2 text-xs"> <!--[cite: 18] -->
+                    <li><a href="#" class="hover:text-gold-400 transition">Instagram Stories</a></li> <!--[cite: 18] -->
+                    <li><a href="#" class="hover:text-gold-400 transition">Pinterest Moodboards</a></li> <!--[cite: 18] -->
+                    <li><a href="#" class="hover:text-gold-400 transition">Vogue Wedding Features</a></li>
+                    <li><a href="#" class="hover:text-gold-400 transition">Kinfolk Essays</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 4: Location[cite: 18] -->
+            <div>
+                <h4 class="font-serif uppercase tracking-widest text-xs text-white font-bold mb-4">Location</h4> <!--[cite: 18] -->
+                <div class="space-y-2 text-xs text-stone-400"> <!--[cite: 18] -->
+                    <p class="text-stone-300">123 Creative Lane</p> <!--[cite: 18] -->
+                    <p>East End, London</p> <!--[cite: 18] -->
+                    <p>United Kingdom</p> <!--[cite: 18] -->
+                    <p class="text-gold-400 font-serif italic mt-2">Visits by appointment only</p>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- Strict Copyright Requirement -->
+        <div class="max-w-7xl mx-auto px-6 pt-8 text-center text-xs text-stone-500 font-medium"> <!--[cite: 18] -->
+            <p>© 2026 WebNova Studio · RR Web Designers · All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Fullscreen Lightbox Modal[cite: 18] -->
+    <div id="lightbox" class="fixed inset-0 z-[2000] bg-black/95 flex items-center justify-center p-4 hidden" onclick="closeLightbox()"> <!--[cite: 18] -->
+        <button class="absolute top-6 right-8 text-stone-400 hover:text-white text-3xl focus:outline-none" aria-label="Close Lightbox">&times;</button>
+        <div class="relative max-w-5xl max-h-[88vh] overflow-hidden" onclick="event.stopPropagation()">
+            <img id="lightbox-img" src="" alt="Fullscreen Photography View" class="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"> <!--[cite: 18] -->
+        </div>
+    </div>
+
+    <!-- Interactive JavaScript -->
+    <script>
+        // Header Shrink on Scroll Effect
+        const navbar = document.getElementById('navbar');
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                navbar.classList.add('py-3');
+                navbar.classList.remove('py-4');
+            } else {
+                navbar.classList.add('py-4');
+                navbar.classList.remove('py-3');
+            }
+        });
+
+        // Mobile Menu Drawer Toggle
+        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+        const mobileDrawer = document.getElementById('mobileDrawer');
+        const menuToggleIcon = document.getElementById('menuToggleIcon');
+        const mobileNavLinks = document.querySelectorAll('.mobile-nav-link');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileDrawer.classList.toggle('hidden');
+            if (mobileDrawer.classList.contains('hidden')) {
+                menuToggleIcon.classList.remove('fa-xmark');
+                menuToggleIcon.classList.add('fa-bars');
+            } else {
+                menuToggleIcon.classList.remove('fa-bars');
+                menuToggleIcon.classList.add('fa-xmark');
+            }
+        });
+
+        mobileNavLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                mobileDrawer.classList.add('hidden');
+                menuToggleIcon.classList.remove('fa-xmark');
+                menuToggleIcon.classList.add('fa-bars');
+            });
+        });
+
+        // Fullscreen Lightbox Handler[cite: 18]
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+
+        function openLightbox(src) { /*[cite: 18] */
+            lightboxImg.src = src; /*[cite: 18] */
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('active');
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        // Close Lightbox on Escape Key
+        window.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                closeLightbox();
+            }
+        });
+
+        // Intersection Observer for Smooth Scroll Reveals
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, {
+            threshold: 0.12,
+            rootMargin: "0px 0px -40px 0px"
+        });
+
+        document.querySelectorAll('.reveal-element').forEach(el => {
+            revealObserver.observe(el);
+        });
+    </script>
+</body>
+</html>
